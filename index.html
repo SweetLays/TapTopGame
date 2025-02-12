@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TapTop Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>TapTop Game</h1>
+    <p>Твой счет: <span id="score">0</span> 🪙</p>
+    <button onclick="tap()">Тапай! 👆</button>
+    <button onclick="buyAutoclicker()">Купить автокликер (100 🪙)</button>
+    <p>Автокликеры: <span id="autoclickers">0</span> 🤖</p>
+
+    <script>
+        let score = 0;
+        let autoclickers = 0;
+        let clickPower = 1;
+
+        function tap() {
+            score += clickPower;
+            updateUI();
+        }
+
+        function buyAutoclicker() {
+            if (score >= 100) {
+                score -= 100;
+                autoclickers += 1;
+                updateUI();
+            } else {
+                alert("Недостаточно очков! 😢");
+            }
+        }
+
+        function updateUI() {
+            document.getElementById("score").innerText = score;
+            document.getElementById("autoclickers").innerText = autoclickers;
+        }
+
+        // Автокликер
+        setInterval(() => {
+            score += autoclickers;
+            updateUI();
+        }, 1000);
+    </script>
+</body>
+</html>
