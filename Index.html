@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TapTop Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 TapTop Game</h1>
+    <p>Твой счет: <span id="score">0</span> 🪙</p>
+    <button onclick="tap()">Тапай! 👆</button>
+    <button onclick="openShop()">Магазин 🛒</button>
+    <button onclick="openProfile()">Профиль 📊</button>
+    <button onclick="openTop()">Топ игроков 🏆</button>
+
+    <div id="shop" style="display: none;">
+        <h2>🛒 Магазин улучшений</h2>
+        <button onclick="buyUpgrade('click_power')">💪 Увеличить доход за клик (+1) - 50 🪙</button>
+        <button onclick="buyUpgrade('autoclicker')">🤖 Купить автокликер - 100 🪙</button>
+        <button onclick="buyUpgrade('boost')">🚀 Купить буст (10 мин) - 200 🪙</button>
+    </div>
+
+    <div id="profile" style="display: none;">
+        <h2>📊 Твой профиль</h2>
+        <p>Счет: <span id="profileScore">0</span> 🪙</p>
+        <p>Доход за клик: <span id="clickPower">1</span> 💪</p>
+        <p>Автокликеры: <span id="autoclickers">0</span> 🤖</p>
+        <p>Бусты: <span id="boosts">0</span> 🚀</p>
+    </div>
+
+    <div id="top" style="display: none;">
+        <h2>🏆 Топ игроков</h2>
+        <ul id="topPlayers"></ul>
+    </div>
+
+    <script>
+        let score = 0;
+        let clickPower = 1;
+        let autoclickers = 0;
+        let boosts = 0;
+
+        function tap() {
+            score += clickPower * (boosts > 0 ? 2 : 1);
+            updateUI();
+        }
+
+        function openShop() {
+            document.getElementById('shop').style.display = 'block';
+            document.getElementById('profile').style.display = 'none';
+            document.getElementById('top').style.display = 'none';
+        }
+
+        function openProfile() {
+            document.getElementById('profile').style.display = 'block';
+            document.getElementById('shop').style.display = 'none';
+            document.getElementById('top').style.display = 'none';
+            updateProfile();
+        }
+
+        function openTop() {
+            document.getElementById('top').style.display = 'block';
+            document.getElementById('shop').style.display = 'none';
+            document.getElementById('profile').style.display = 'none';
+            updateTop();
+        }
+
+        function buyUpgrade(type) {
+            const upgrades = {
+                click_power: { price: 50, effect: () => clickPower++ },
+                autoclicker: { price: 100, effect: () => autoclickers++ },
+                boost: { price: 200, effect: () => boosts++ },
+            };
+
+            const upgrade = upgrades[type];
+            if (score >= upgrade.price) {
+                score -= upgrade.price;
+                upgrade.effect();
+                updateUI();
+            } else {
+                alert("Недостаточно очков! 😢");
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function updateProfile() {
+            document.getElementById('profileScore').textContent = score;
+            document.getElementById('clickPower').textContent = clickPower;
+            document.getElementById('autoclickers').textContent = autoclickers;
+            document.getElementById('boosts').textContent = boosts;
+        }
+
+        function updateTop() {
+            // Здесь можно добавить логику для отображения топ-10 игроков
+            const topPlayers = document.getElementById('topPlayers');
+            topPlayers.innerHTML = '<li>Игрок 1: 1000 🪙</li><li>Игрок 2: 800 🪙</li>';
+        }
+    </script>
+</body>
+</html>
