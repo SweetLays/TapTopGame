@@ -1,110 +1,118 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TapTop Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f0f0;
-            padding: 20px;
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            margin: 10px;
-            cursor: pointer;
-            background-color: #007bff;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 600% 600%;
+            animation: gradientAnimation 15s ease infinite;
             color: white;
-            border: none;
-            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        button:hover {
-            background-color: #0056b3;
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .score-display {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.5rem;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        .button:active {
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0.9);
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 1rem;
         }
     </style>
 </head>
 <body>
-    <h1>🎮 TapTop Game</h1>
-    <p>Твой счет: <span id="score">0</span> 🪙</p>
-    <button onclick="tap()">Тапай! 👆</button>
-    <button onclick="openShop()">Магазин 🛒</button>
-    <button onclick="openProfile()">Профиль 📊</button>
-    <button onclick="openTop()">Топ игроков 🏆</button>
-    <div id="shop" style="display: none;">
-        <h2>🛒 Магазин улучшений</h2>
-        <button onclick="buyUpgrade('click_power')">💪 Увеличить доход за клик (+1) - 50 🪙</button>
-        <button onclick="buyUpgrade('autoclicker')">🤖 Купить автокликер - 100 🪙</button>
-        <button onclick="buyUpgrade('boost')">🚀 Купить буст (10 мин) - 200 🪙</button>
+    <div class="container">
+        <h1>TapTop Game</h1>
+        <div class="score-display" id="scoreDisplay">Score: 0</div>
+        <div class="button" onclick="tap()">Tap! 👆</div>
+        <div class="button" onclick="openShop()">Shop 🛒</div>
+        <div class="button" onclick="openProfile()">Profile 📊</div>
+        <div class="button" onclick="openTop()">Top Players 🏆</div>
     </div>
-    <div id="profile" style="display: none;">
-        <h2>📊 Твой профиль</h2>
-        <p>Счет: <span id="profileScore">0</span> 🪙</p>
-        <p>Доход за клик: <span id="clickPower">1</span> 💪</p>
-        <p>Автокликеры: <span id="autoclickers">0</span> 🤖</p>
-        <p>Бусты: <span id="boosts">0</span> 🚀</p>
+    <div class="footer">
+        &copy; 2023 TapTop Game. All rights reserved.
     </div>
-    <div id="top" style="display: none;">
-        <h2>🏆 Топ игроков</h2>
-        <ul id="topPlayers"></ul>
-    </div>
+
     <script>
         let score = 0;
-        let clickPower = 1;
-        let autoclickers = 0;
-        let boosts = 0;
+
         function tap() {
-            score += clickPower * (boosts > 0 ? 2 : 1);
-            updateUI();
+            score += 1;
+            document.getElementById('scoreDisplay').innerText = `Score: ${score}`;
         }
+
         function openShop() {
-            document.getElementById('shop').style.display = 'block';
-            document.getElementById('profile').style.display = 'none';
-            document.getElementById('top').style.display = 'none';
+            alert('Shop functionality coming soon!');
         }
+
         function openProfile() {
-            document.getElementById('profile').style.display = 'block';
-            document.getElementById('shop').style.display = 'none';
-            document.getElementById('top').style.display = 'none';
-            updateProfile();
+            alert('Profile functionality coming soon!');
         }
+
         function openTop() {
-            document.getElementById('top').style.display = 'block';
-            document.getElementById('shop').style.display = 'none';
-            document.getElementById('profile').style.display = 'none';
-            updateTop();
-        }
-        function buyUpgrade(type) {
-            const upgrades = {
-                click_power: { price: 50, effect: () => clickPower++ },
-                autoclicker: { price: 100, effect: () => autoclickers++ },
-                boost: { price: 200, effect: () => boosts++ },
-            };
-            const upgrade = upgrades[type];
-            if (score >= upgrade.price) {
-                score -= upgrade.price;
-                upgrade.effect();
-                updateUI();
-            } else {
-                alert("Недостаточно очков! 😢");
-            }
-        }
-        function updateUI() {
-            document.getElementById('score').textContent = score;
-        }
-        function updateProfile() {
-            document.getElementById('profileScore').textContent = score;
-            document.getElementById('clickPower').textContent = clickPower;
-            document.getElementById('autoclickers').textContent = autoclickers;
-            document.getElementById('boosts').textContent = boosts;
-        }
-        function updateTop() {
-            // Здесь можно добавить логику для отображения топ-10 игроков
-            const topPlayers = document.getElementById('topPlayers');
-            topPlayers.innerHTML = '<li>Игрок 1: 1000 🪙</li><li>Игрок 2: 800 🪙</li>';
+            alert('Top Players functionality coming soon!');
         }
     </script>
 </body>
 </html>
+
